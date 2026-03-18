@@ -2,9 +2,16 @@
 // Books are called "Documents" in the Hardcover api
 export type HardcoverDocument = {
     id: string
-    author_names: string[]
-    genres: string[]
-    tags: string[]
+    // author_names: string[]
+    contributions: {
+        "author": {
+            "id": number,
+            "name": string,
+            "slug": string
+        }
+    }[]
+    // genres: string[]
+    // tags: string[]
     slug: string
     title: string
     subtitle: string | undefined
@@ -15,7 +22,7 @@ export type HardcoverDocument = {
         width: number | undefined
         url: string | undefined
     }
-    release_year: string | undefined
+    release_year: number | undefined
     rating: number
     ratings_count: number
     reviews_count: number
