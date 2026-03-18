@@ -46,7 +46,7 @@ export default function App() {
   return (
     <>
       <AppNavbar />
-      <div className="w-full max-w-content-width mx-auto px-4">
+      <div className="w-full max-w-content-width mx-auto px-4 pb-16">
         <Outlet />
       </div>
     </>
