@@ -1,7 +1,7 @@
 
 // Books are called "Documents" in the Hardcover api
 export type HardcoverDocument = {
-    id: string
+    id: number
     // author_names: string[]
     contributions: {
         "author": {
