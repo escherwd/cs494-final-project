@@ -42,8 +42,8 @@ export default function SearchPage() {
     );
 
   return (
-    <main>
-      <div className="pt-16 text-4xl font-serif font-semibold">
+    <main className="pt-16">
+      <div className="text-4xl font-serif font-semibold">
         Results for "{query}"
       </div>
       {results ? (

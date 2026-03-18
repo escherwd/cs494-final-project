@@ -2,6 +2,9 @@ import { useMemo, useState } from "react";
 import type { Route } from "./+types/home";
 import type { HardcoverDocument } from "~/types";
 import BookComponent from "~/components/book";
+import EmptyState from "~/components/empty_state";
+import IconNoBooks from "~icons/lucide/book-heart"
+import IconNoFilterResults from "~icons/lucide/filter-x"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -29,7 +32,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   const [search, setSearch] = useState("");
   const [filterAuthor, setFilterAuthor] = useState<string | undefined>(undefined);
-  const [filterCover, setFilterCover] = useState<"all" | "with-cover" | "no-cover">("all");
   const [filterRating, setFilterRating] = useState<string>("all");
   const [filterLength, setFilterLength] = useState<
     "all" | "short" | "medium" | "long"
@@ -85,14 +87,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       );
     }
 
-    if (filterCover === "with-cover") {
-      all = all.filter((book) => !!book.image?.url);
-    }
-
-    if (filterCover === "no-cover") {
-      all = all.filter((book) => !book.image?.url);
-    }
-
     if (filterRating !== "all") {
       const minRating = Number(filterRating);
       all = all.filter(
@@ -146,7 +140,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     books,
     search,
     filterAuthor,
-    filterCover,
     filterRating,
     filterLength,
     filterYear,
@@ -156,7 +149,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const clearFilters = () => {
     setSearch("");
     setFilterAuthor(undefined);
-    setFilterCover("all");
     setFilterRating("all");
     setFilterLength("all");
     setFilterYear("all");
@@ -164,12 +156,15 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <main>
-      <div className="mb-8 mt-16 text-4xl font-semibold font-serif">
+    <main className="pt-16">
+      <div className=" text-4xl font-semibold font-serif">
         My Library
       </div>
+      <div className="text-lg mt-2 text-gray-500">
+        {books.length} books
+      </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 mt-8">
         <aside className="flex-none w-72 px-4 bg-gray-50 rounded-lg min-h-64 flex flex-col divide-y divide-gray-200 text-gray-600">
           <div className="py-3">
             <div className="flex items-center justify-between">
@@ -177,7 +172,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="text-sm text-blue-600 hover:underline"
+                className="app-button text-sm"
               >
                 Clear all
               </button>
@@ -280,26 +275,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </div>
 
           <div className="py-3">
-            <label htmlFor="cover" className="block text-sm font-medium">
-              Cover
-            </label>
-            <select
-              className="mt-2 block app-input w-full"
-              id="cover"
-              value={filterCover}
-              onChange={(e) =>
-                setFilterCover(
-                  e.target.value as "all" | "with-cover" | "no-cover",
-                )
-              }
-            >
-              <option value="all">All</option>
-              <option value="with-cover">Has Cover</option>
-              <option value="no-cover">No Cover</option>
-            </select>
-          </div>
-
-          <div className="py-3">
             <label htmlFor="sort" className="block text-sm font-medium">
               Sort By
             </label>
@@ -326,18 +301,24 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </select>
           </div>
 
-          <div className="py-3 text-sm">
+          <div className="py-3 text-sm text-gray-400">
             Showing {filteredBooks.length} of {books.length} books
           </div>
         </aside>
 
         <div className="flex-1">
-          {filteredBooks.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 p-10 text-center text-gray-500">
-              No books match your current filters.
-            </div>
+          {filteredBooks.length === 0 ? (books.length === 0 ?
+            (
+              <EmptyState text="Your library is empty.">
+                <IconNoBooks className="size-8" />
+              </EmptyState>
+            ) : (
+              <EmptyState text="No books match your filter.">
+                <IconNoFilterResults className="size-8" />
+              </EmptyState>
+            )
           ) : (
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-3">
               {filteredBooks.map((book) => (
                 <BookComponent key={book.id} book={book} />
               ))}

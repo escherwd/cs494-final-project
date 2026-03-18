@@ -5,7 +5,7 @@ export function BookCover({ book }: { book: HardcoverDocument }) {
   return (
     <div
       className="aspect-[1/1.6] bg-gray-800 overflow-hidden rounded-md flex items-center justify-center shadow"
-      style={{ backgroundColor: book.image?.color }}
+      style={{ backgroundColor: book.image?.color, viewTransitionName: `thumb-${book.slug}` }}
     >
       {book.image?.url ? (
         <img
