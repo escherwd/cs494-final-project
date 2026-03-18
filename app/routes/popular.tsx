@@ -64,7 +64,7 @@ export default function TrendingPage({ loaderData }: Route.ComponentProps) {
         Top 25 of All Time
       </div>
 
-      <div className="mt-8 grid grid-cols-5">
+      <div className="mt-8 grid grid-cols-3 sm:grid-cols-5">
         {books.map((book) => (
           <BookComponent key={book.id} book={book} />
         ))}

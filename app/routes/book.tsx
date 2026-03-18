@@ -125,8 +125,8 @@ export default function BookPage({ params }: Route.ComponentProps) {
 
   return (
     <div className="mt-16">
-      <div className="flex gap-8 items-end">
-        <div className="w-48 flex-none">
+      <div className="flex flex-col sm:flex-row gap-8 items-end">
+        <div className="w-full sm:w-48 flex-none">
           <BookCover book={book} />
         </div>
         <div>
@@ -153,7 +153,7 @@ export default function BookPage({ params }: Route.ComponentProps) {
           </div>
         </div>
       </div>
-      <div className="mt-6 flex items-start gap-8">
+      <div className="mt-6 flex flex-col sm:flex-row items-start gap-8">
         {bookIsInLibrary ? (
           <button
             onClick={() => removeFromLibrary()}
@@ -172,7 +172,7 @@ export default function BookPage({ params }: Route.ComponentProps) {
           </button>
         )}
 
-        <div className="grid grid-cols-3 flex-1 divide-x divide-gray-200 *:text-center *:py-2 *:flex *:items-center *:gap-2 *:justify-center text-gray-500 font-serif text-xl">
+        <div className="grid grid-rows-3 w-full sm:grid-cols-3 flex-1 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 *:text-center *:py-2 *:flex *:items-center *:gap-2 *:justify-center text-gray-500 font-serif text-xl">
           <div>
             <IconStar className="size-4 -mb-2" />
             {book.rating ? (

@@ -164,8 +164,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         {books.length} books
       </div>
 
-      <div className="flex gap-4 mt-8">
-        <aside className="flex-none w-72 px-4 bg-gray-50 rounded-lg min-h-64 flex flex-col divide-y divide-gray-200 text-gray-600">
+      <div className="flex flex-col sm:flex-row gap-4 mt-8">
+        <aside className="flex-none w-full sm:w-72 px-4 bg-gray-50 rounded-lg min-h-64 flex flex-col divide-y divide-gray-200 text-gray-600">
           <div className="py-3">
             <div className="flex items-center justify-between">
               <span>Filters</span>

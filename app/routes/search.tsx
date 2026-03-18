@@ -47,7 +47,7 @@ export default function SearchPage() {
         Results for "{query}"
       </div>
       {results ? (
-        <div className="mt-8 grid grid-cols-5">
+        <div className="mt-8 grid grid-cols-3 sm:grid-cols-5">
           {results?.map((book) => (
             <BookComponent key={book.id} book={book} />
           ))}

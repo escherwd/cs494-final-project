@@ -103,7 +103,7 @@ export default function AuthorPage({ loaderData }: Route.ComponentProps) {
       </div>
       <div className="mt-12 w-full">
         <div className="font-serif font-semibold text-xl">Popular Books</div>
-        <div className="mt-6 grid grid-cols-5">
+        <div className="mt-6 grid grid-cols-3 sm:grid-cols-5">
           {author.contributions?.map((contribution) => (
             <BookComponent key={contribution.book.id} book={contribution.book} />
           ))}
