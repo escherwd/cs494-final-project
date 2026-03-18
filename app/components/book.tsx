@@ -4,10 +4,10 @@ import type { HardcoverDocument } from "~/types";
 export function BookCover({ book }: { book: HardcoverDocument }) {
   return (
     <div
-      className="aspect-[1/1.6] bg-gray-800 overflow-hidden rounded-md flex items-center justify-center"
-      style={{ backgroundColor: book.image.color }}
+      className="aspect-[1/1.6] bg-gray-800 overflow-hidden rounded-md flex items-center justify-center shadow"
+      style={{ backgroundColor: book.image?.color }}
     >
-      {book.image.url ? (
+      {book.image?.url ? (
         <img
           src={book.image.url}
           alt={book.title}

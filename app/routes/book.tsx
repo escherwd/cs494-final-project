@@ -1,10 +1,50 @@
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, redirect, useLocation, useNavigate } from "react-router";
 import type { HardcoverDocument } from "~/types";
 import type { Route } from "./+types/book";
 import { useEffect, useState } from "react";
 import { BookCover } from "~/components/book";
 import EmptyState from "~/components/empty_state";
 import IconLoaderCircle from "~icons/lucide/loader-circle";
+import IconPlus from "~icons/lucide/book-plus";
+import IconStar from "~icons/lucide/star";
+import IconUsers from "~icons/lucide/users";
+import IconBook from "~icons/lucide/book-open";
+
+const query = `
+query($slug: String!) {
+  books(where: {slug: {_eq: $slug}}) {
+    title
+    id
+    image {
+      id
+      url
+      color
+    }
+    updated_at
+    release_year
+    reviews_count
+    slug
+    subtitle
+    rating
+    ratings_count
+    lists_count
+    users_read_count
+    pages
+    description
+    contributions {
+      author {
+        id
+        image {
+          url
+        }
+        name
+        slug
+        bio
+      }
+    }
+  }
+}
+`;
 
 export default function BookPage({ params }: Route.ComponentProps) {
   const location = useLocation();
@@ -20,10 +60,12 @@ export default function BookPage({ params }: Route.ComponentProps) {
     (async () => {
       const req = await fetch(import.meta.env.VITE_HARDCOVER_API_ROOT_URL, {
         method: "POST",
-        body: `{
-	        "query": "query FindBook{books(where:{slug:{_eq:\\"${params.slug}\\"}}){title id image{id url color}updated_at release_year reviews_count slug subtitle rating ratings_count lists_count pages description taggings{tag{count id slug tag}} contributions{author{id image{url}name slug bio}}}} ",
-	        "variables": {}
-        }`,
+        body: JSON.stringify({
+          query,
+          variables: {
+            slug: params.slug,
+          },
+        }),
         headers: {
           authorization: import.meta.env.VITE_HARDCOVER_API_TOKEN,
           "content-type": "application/json",
@@ -60,13 +102,47 @@ export default function BookPage({ params }: Route.ComponentProps) {
           <div className="mt-2 text-lg">
             {book.contributions.map((c) => (
               <span key={c.author.id} className="last:[&>span]:hidden">
-                <Link to={`/author/${c.author.slug}`} className="hover:underline">{c.author.name}</Link>
+                <Link
+                  to={`/author/${c.author.slug}`}
+                  className="hover:underline"
+                >
+                  {c.author.name}
+                </Link>
                 <span>, </span>
               </span>
             ))}
+            &nbsp;–&nbsp;
+            {book.release_year}
           </div>
           <div className="mt-2 line-clamp-4 text-gray-500">
             {book.description}
+          </div>
+        </div>
+      </div>
+      <div className="mt-6 flex items-start gap-8">
+        <button className="app-button app-button-primary app-button-big w-48 flex-none">
+          <IconPlus className="mr-2" />
+          Add To Library
+        </button>
+        <div className="grid grid-cols-3 flex-1 divide-x divide-gray-200 *:text-center *:py-2 *:flex *:items-center *:gap-2 *:justify-center text-gray-500 font-serif text-xl">
+          <div>
+            <IconStar className="size-4 -mb-2" />
+            {book.rating ? (
+              <>
+                {book.rating.toFixed(1)}
+                <span className="text-sm -ml-1.5 -mb-1.5">/5</span>
+              </>
+            ) : (
+              <>N/A</>
+            )}
+          </div>
+          <div>
+            <IconUsers className="size-4 -mb-2" />
+            {book.ratings_count} Reviews
+          </div>
+          <div>
+            <IconBook className="size-4 -mb-2" />
+            {book.users_read_count} Readers
           </div>
         </div>
       </div>
